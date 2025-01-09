@@ -16,9 +16,44 @@ let games = [
     ]
 
     router.get('/get-all-games', (req, res)=>{
-        res.json({games})
+        res.json(games)
     })
 
     router.get('/get-game-by-id', (req, res)=>{
-       const {id} = req.params
+       const {id} = req.query
+       const game = games.find(g => g.id === id)
+       if(game){
+        res.json({
+            game: game.game,
+            id: game.id,
+            description: game.description,
+        })
+       }
     })
+
+    router.post('/create-new-game', (req, res)=>{
+        const {game, description} = req.body
+        if(game || description === ""){
+            res.end("Cannot leave text area blank")
+        } else{
+            games.push(newGame)
+        }
+        const existingGame = games.find(g => g.game === game)
+        if(existingGame){
+            res.end("Game already exists, cannot add game")
+        }
+        
+        const newGame = {
+            id: uuidv4(),
+            game,
+            description
+        }
+        res.json(games)
+    })
+
+    router.put('/', (req, res)=>{
+        const {id} = req.query
+        const game = game.find(g => g.id === id)
+    })
+
+    module.exports = router
