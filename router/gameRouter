@@ -15,45 +15,54 @@ let games = [
     }
     ]
 
-    router.get('/get-all-games', (req, res)=>{
-        res.json(games)
-    })
+router.get('/get-all-games', (req, res)=>{
+    res.json(games)
+})
 
-    router.get('/get-game-by-id', (req, res)=>{
-       const {id} = req.query
-       const game = games.find(g => g.id === id)
-       if(game){
-        res.json({
-            game: game.game,
-            id: game.id,
-            description: game.description,
-        })
-       }
+router.get('/get-game-by-id', (req, res)=>{
+    const {id} = req.query
+    const game = games.find(g => g.id === id)
+    if(game){
+    res.json({
+        game: game.game,
+        id: game.id,
+        description: game.description,
     })
+    }else{
 
-    router.post('/create-new-game', (req, res)=>{
-        const {game, description} = req.body
-        if(game || description === ""){
-            res.end("Cannot leave text area blank")
-        } else{
-            games.push(newGame)
-        }
+    }
+})
+
+router.post('/create-new-game', (req, res)=>{
+    const {game, description} = req.body
+    if(!game || !description){
+        res.end("Cannot leave text area blank")
+    } else{
         const existingGame = games.find(g => g.game === game)
         if(existingGame){
-            res.end("Game already exists, cannot add game")
-        }
-        
+        res.end("Game already exists, cannot add game")
+    }else{
         const newGame = {
             id: uuidv4(),
-            game,
-            description
-        }
+            game:,
+            description:
+    }
+        games.push(newGame)
         res.json(games)
-    })
+    }
+}
+})
 
-    router.put('/', (req, res)=>{
-        const {id} = req.query
-        const game = game.find(g => g.id === id)
-    })
+router.put('/update-game', (req, res)=>{
+    const {id} = req.params
+    const {game, description} = req.body
+    const existingGame = games.find(g=> g.id === id)
+})
 
-    module.exports = router
+router.delete('/delete-game', (req, res)=>{
+    const {id} = req.params
+    const gameIndex = games.remove({games:id})
+})
+
+
+module.exports = router
